@@ -13,21 +13,23 @@ jobs:
     strategy:
       matrix:
         distro:
-          - debian
-          - ubuntu
+          - debian10
+          - ubuntu2004
 
     steps:
       - name: Check out the codebase.
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Python 3.
-        uses: actions/setup-python@v3
+        uses: actions/setup-python@v5
         with:
           python-version: "3.x"
 
       - name: Install test dependencies
         run: |
-          pip install ansible molecule molecule-docker docker yamllint ansible-lint
+          python -m pip install --upgrade pip
+          pip install "molecule-plugins[docker]" "molecule-plugins[lint]"
+          pip install --upgrade ansible "molecule[docker]" docker
 
       - name: Run Molecule tests
         run: molecule test
@@ -35,3 +37,4 @@ jobs:
           PY_COLORS: "1"
           ANSIBLE_FORCE_COLOR: "1"
           MOLECULE_DISTRO: ${{ matrix.distro }}
+          ANSIBLE_REMOTE_TEMP: /tmp/ansible
