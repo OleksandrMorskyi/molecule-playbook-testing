@@ -13,7 +13,8 @@ jobs:
     strategy:
       matrix:
         distro:
-          - rockylinux9
+          - debian
+          - ubuntu
 
     steps:
       - name: Check out the codebase.
